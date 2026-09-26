@@ -30,6 +30,10 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
             <div className="stat"><strong>{new Set(tracks.map((item) => item.contest.institution)).size}</strong><span>instituições</span></div>
             <div className="stat"><strong>{rankedKnowledge.length}</strong><span>macroconhecimentos conectados</span></div>
           </div>
+          <div className="actions" style={{ marginTop: 20 }}>
+            <Link className="button primary" href={`/frequencia?area=${area.slug}`}>Calcular frequência nesta área</Link>
+            <Link className="button" href={`/mapa?area=${area.slug}`}>Abrir no mapa</Link>
+          </div>
         </div>
       </section>
 
@@ -37,7 +41,7 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
         <div className="container">
           <div className="section-heading">
             <div><div className="eyebrow">Núcleo observado</div><h2>Conhecimentos que aparecem nesta família</h2></div>
-            <p>As contagens refletem apenas a base já catalogada e não devem ser lidas como incidência nacional definitiva.</p>
+            <p>As contagens refletem apenas a base já catalogada e não devem ser lidas como incidência nacional definitiva. A página de frequência transforma essas contagens em proporções com denominador explícito.</p>
           </div>
           <div className="link-grid">
             {rankedKnowledge.map(([item, count]) => (
