@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { allTracks, areas, contests, knowledge } from "@/data/catalog";
+import { allTracks, areas, contests, knowledge, orgFamilies, topics } from "@/data/catalog";
 
 export default function HomePage() {
+  const granularTracks = allTracks.filter((track) => track.coverage === "topicos").length;
+
   return (
     <>
       <section className="hero">
@@ -17,10 +19,11 @@ export default function HomePage() {
           </div>
           <div className="stats">
             <div className="stat"><strong>{areas.length}</strong><span>famílias de atuação</span></div>
-            <div className="stat"><strong>{knowledge.length}</strong><span>macroconhecimentos</span></div>
-            <div className="stat"><strong>{contests.length}</strong><span>certames na amostra inicial</span></div>
+            <div className="stat"><strong>{orgFamilies.length}</strong><span>famílias institucionais</span></div>
+            <div className="stat"><strong>{contests.length}</strong><span>certames documentados</span></div>
             <div className="stat"><strong>{allTracks.length}</strong><span>trilhas/perfis mapeados</span></div>
           </div>
+          <p className="hero-footnote">{knowledge.length} macroconhecimentos · {topics.length} tópicos na taxonomia · {granularTracks} trilhas já decompostas em nível fino</p>
         </div>
       </section>
 
@@ -46,8 +49,8 @@ export default function HomePage() {
             <article className="card">
               <span className="card-kicker">Já tenho referências</span>
               <h3>Quero comparar concursos</h3>
-              <p>Observe a sobreposição de macrotemas para entender o que pode ser reaproveitado entre perfis.</p>
-              <Link className="card-link" href="/comparar">Ver matriz inicial →</Link>
+              <p>Compare duas trilhas no nível macro e, quando os editais já foram decompostos, também no nível de tópicos.</p>
+              <Link className="card-link" href="/comparar">Comparar duas trilhas →</Link>
             </article>
           </div>
         </div>
@@ -56,8 +59,8 @@ export default function HomePage() {
       <section className="section">
         <div className="container">
           <div className="section-heading">
-            <div><div className="eyebrow">Famílias</div><h2>O espaço de TI é maior que um edital.</h2></div>
-            <p>Estas categorias não pretendem substituir a nomenclatura oficial dos órgãos. Elas são uma camada curatorial para permitir comparação entre editais diferentes.</p>
+            <div><div className="eyebrow">Famílias de atuação</div><h2>O espaço de TI é maior que um edital.</h2></div>
+            <p>Estas categorias não substituem a nomenclatura oficial. Elas formam uma camada comum para conectar cargos que recebem nomes diferentes em órgãos diferentes.</p>
           </div>
           <div className="card-grid">
             {areas.map((area) => (
@@ -65,7 +68,26 @@ export default function HomePage() {
                 <span className="card-kicker">{area.shortName}</span>
                 <h3>{area.name}</h3>
                 <p>{area.description}</p>
-                <Link className="card-link" href={`/mapa?area=${area.slug}`}>Explorar perfis →</Link>
+                <Link className="card-link" href={`/areas/${area.slug}`}>Abrir família →</Link>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-heading">
+            <div><div className="eyebrow">Onde os cargos vivem</div><h2>Navegue também pela família institucional.</h2></div>
+            <p>Empresas públicas, universidades, tribunais, controle, MPs/Defensorias e Executivo têm estruturas de carreira e combinações de conteúdo diferentes.</p>
+          </div>
+          <div className="card-grid">
+            {orgFamilies.map((family) => (
+              <article className="card" key={family.slug}>
+                <span className="card-kicker">Instituições</span>
+                <h3>{family.name}</h3>
+                <p>{family.description}</p>
+                <Link className="card-link" href={`/orgaos/${family.slug}`}>Explorar família →</Link>
               </article>
             ))}
           </div>
