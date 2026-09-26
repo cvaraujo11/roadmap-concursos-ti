@@ -6,4 +6,5 @@
 - [M4 — Provas reais como segunda camada de evidência](./M4.md)
 - [M5 — Cartografia geográfica](./M5.md)
 - [M5 — Geodados auditáveis](./M5-geodata.md)
+- [Inventário — empresas públicas e estatais de TIC](./empresas-publicas-ti.md)
 - [Fontes da cartografia](./sources.md)
