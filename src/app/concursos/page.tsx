@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { contests, orgFamilyName } from "@/data/catalog";
+import { coverageForTrack } from "@/data/granular";
 
 const statusLabel = {
   "em-andamento": "Em andamento",
@@ -15,7 +16,7 @@ export default function ConcursosPage() {
         <div className="container">
           <div className="eyebrow">Base de evidências</div>
           <h1>Editais reais, não listas soltas de matérias.</h1>
-          <p>A M1 amplia a amostra para todas as famílias institucionais da primeira ontologia. Cada certame mantém fonte, data de verificação e nível de granularidade já catalogado.</p>
+          <p>A base cobre diferentes famílias institucionais e evolui em duas camadas: primeiro o perfil é classificado em macroconhecimentos; depois o conteúdo programático pode ser decomposto em tópicos rastreáveis.</p>
         </div>
       </section>
       <section className="section">
@@ -27,7 +28,7 @@ export default function ConcursosPage() {
               </thead>
               <tbody>
                 {contests.map((contest) => {
-                  const granular = contest.tracks.filter((track) => track.coverage === "topicos").length;
+                  const granular = contest.tracks.filter((track) => coverageForTrack(track) === "topicos").length;
                   return (
                     <tr key={contest.id}>
                       <td>
