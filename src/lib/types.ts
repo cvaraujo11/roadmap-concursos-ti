@@ -29,6 +29,8 @@ export type KnowledgeSlug =
   | "gestao-servicos"
   | "processos-negocio";
 
+export type TopicSlug = string;
+
 export interface Area {
   slug: AreaSlug;
   name: string;
@@ -43,13 +45,24 @@ export interface Knowledge {
   description: string;
 }
 
+export interface Topic {
+  slug: TopicSlug;
+  name: string;
+  knowledge: KnowledgeSlug;
+  description?: string;
+}
+
 export interface Track {
   id: string;
   name: string;
   areas: AreaSlug[];
   knowledge: KnowledgeSlug[];
+  topics?: TopicSlug[];
+  coverage?: "macro" | "topicos";
   locality?: string;
   level: "medio" | "superior";
+  requirements?: string;
+  statusNote?: string;
   evidenceNote: string;
 }
 
@@ -61,6 +74,7 @@ export interface Contest {
   organizer: string;
   orgFamily: OrgFamily;
   sphere: "federal" | "estadual" | "municipal";
+  status?: "em-andamento" | "realizado" | "homologado" | "historico";
   sourceUrl: string;
   sourceLabel: string;
   verifiedAt: string;
