@@ -6,6 +6,7 @@ import { resolve } from "node:path";
 
 const GEOJSON = resolve("public/data/maps/ibge-ufs-min.geojson");
 const MANIFEST = resolve("public/data/maps/ibge-ufs-min.manifest.json");
+const IBGE_OPEN_DATA_URL = "https://www.ibge.gov.br/acesso-informacao/dados-abertos.html";
 
 const EXPECTED_UFS = [
   "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO",
@@ -59,6 +60,18 @@ if (manifest.provider !== "Instituto Brasileiro de Geografia e Estatística (IBG
 
 if (manifest.featureCount !== 27 || manifest.quality !== "minima" || manifest.intraregion !== "UF") {
   fail("o manifesto não corresponde ao recorte territorial esperado");
+}
+
+if (manifest.sources?.openDataPolicy !== IBGE_OPEN_DATA_URL) {
+  fail("o manifesto não registra a política oficial de dados abertos do IBGE");
+}
+
+if (!manifest.rights?.status || !manifest.rights?.attribution) {
+  fail("o manifesto não explicita regime de reutilização e atribuição");
+}
+
+if (manifest.rights.licenseIdentifier !== null) {
+  fail("não deve ser atribuído um identificador de licença específico que o endpoint do IBGE não declara");
 }
 
 console.log(`map-data: OK — 27 UFs, sha256 ${sha256}`);
