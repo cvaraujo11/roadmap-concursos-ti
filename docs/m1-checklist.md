@@ -1,0 +1,5 @@
+- [ ] ampliar base institucional
+- [ ] introduzir tópicos granulares
+- [ ] comparação interativa
+- [ ] páginas por área, conhecimento e família institucional
+- [ ] CI verde
