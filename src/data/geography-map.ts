@@ -6,6 +6,7 @@ import {
   contestLocations as baseContestLocations,
 } from "./geography";
 import { publicItCompanyLocations } from "./public-it-companies";
+import { publicItCompanyLiquidationLocations } from "./public-it-companies-liquidation";
 
 export {
   BRAZIL_STATES_GEOJSON,
@@ -17,6 +18,7 @@ export {
 export const contestLocations = [
   ...baseContestLocations,
   ...publicItCompanyLocations,
+  ...publicItCompanyLiquidationLocations,
 ];
 
 export const geocodedLocations = contestLocations.filter(
