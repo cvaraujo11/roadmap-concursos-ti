@@ -14,11 +14,23 @@ import type { AreaSlug, KnowledgeSlug, OrgFamily } from "@/lib/types";
 
 const thresholds = [50, 67, 75, 100] as const;
 
-export function FrequencyExplorer() {
-  const [mode, setMode] = useState<FrequencyMode>("granular");
-  const [area, setArea] = useState<AreaSlug | "todas">("todas");
-  const [orgFamily, setOrgFamily] = useState<OrgFamily | "todas">("todas");
-  const [knowledgeFilter, setKnowledgeFilter] = useState<KnowledgeSlug | "todos">("todos");
+type Props = {
+  initialMode?: FrequencyMode;
+  initialArea?: AreaSlug | "todas";
+  initialOrgFamily?: OrgFamily | "todas";
+  initialKnowledge?: KnowledgeSlug | "todos";
+};
+
+export function FrequencyExplorer({
+  initialMode = "granular",
+  initialArea = "todas",
+  initialOrgFamily = "todas",
+  initialKnowledge = "todos",
+}: Props) {
+  const [mode, setMode] = useState<FrequencyMode>(initialMode);
+  const [area, setArea] = useState<AreaSlug | "todas">(initialArea);
+  const [orgFamily, setOrgFamily] = useState<OrgFamily | "todas">(initialOrgFamily);
+  const [knowledgeFilter, setKnowledgeFilter] = useState<KnowledgeSlug | "todos">(initialKnowledge);
   const [threshold, setThreshold] = useState<number>(67);
 
   const filters = useMemo(
