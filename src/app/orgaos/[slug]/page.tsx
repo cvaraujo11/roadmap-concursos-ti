@@ -30,6 +30,10 @@ export default async function OrgFamilyPage({ params }: { params: Promise<{ slug
             <div className="stat"><strong>{tracks.length}</strong><span>trilhas/perfis</span></div>
             <div className="stat"><strong>{new Set(familyContests.map((item) => item.institution)).size}</strong><span>instituições</span></div>
           </div>
+          <div className="actions" style={{ marginTop: 20 }}>
+            <Link className="button primary" href={`/frequencia?familia=${family.slug}`}>Calcular frequência nesta família</Link>
+            <Link className="button" href="/concursos">Ver toda a base</Link>
+          </div>
         </div>
       </section>
 
@@ -37,7 +41,7 @@ export default async function OrgFamilyPage({ params }: { params: Promise<{ slug
         <div className="container">
           <div className="section-heading">
             <div><div className="eyebrow">Padrões da amostra</div><h2>Conhecimentos conectados</h2></div>
-            <p>As contagens são descritivas da base versionada, não uma estimativa de probabilidade de cobrança em futuros concursos.</p>
+            <p>As contagens são descritivas da base versionada, não uma estimativa de probabilidade de cobrança em futuros concursos. Use a frequência para ver a proporção e o denominador completo.</p>
           </div>
           <div className="link-grid">
             {rankedKnowledge.map(([item, count]) => (
