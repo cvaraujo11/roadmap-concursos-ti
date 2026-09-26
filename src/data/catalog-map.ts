@@ -11,6 +11,7 @@ import {
   topicsForKnowledge,
 } from "./catalog";
 import { publicItCompanyContests } from "./public-it-companies";
+import { publicItCompanyLiquidationContests } from "./public-it-companies-liquidation";
 
 export {
   areas,
@@ -24,7 +25,11 @@ export {
   topicsForKnowledge,
 };
 
-export const contests = [...baseContests, ...publicItCompanyContests];
+export const contests = [
+  ...baseContests,
+  ...publicItCompanyContests,
+  ...publicItCompanyLiquidationContests,
+];
 
 export const allTracks = contests.flatMap((contest) =>
   contest.tracks.map((track) => ({ ...track, contest })),
