@@ -17,6 +17,8 @@ A M5 acrescenta uma terceira dimensão à cartografia: **onde as trilhas já cat
 - modo de compatibilidade que usa Jaccard entre macroconhecimentos de uma trilha de referência e trilhas geocodificadas;
 - cobertura geográfica explícita: total do recorte, trilhas geocodificadas, UFs representadas e itens ainda sem ponto normalizado;
 - `múltiplas localidades` e abrangências nacionais não são convertidas artificialmente em coordenadas;
+- malha mínima das 27 UFs obtida das APIs oficiais do IBGE, versionada localmente e validada por SHA-256;
+- nenhuma dependência de GitHub, IBGE ou outro provedor geográfico durante a navegação normal do mapa;
 - corpus de editais e corpus de provas continuam metodologicamente separados;
 - frequência de edital permanece com denominador explícito e incidência em prova continua reservada para uma métrica própria.
 
@@ -30,8 +32,9 @@ A M5 foi inspirada no padrão cartográfico do projeto MIT [`Comm4nd0/conflict-m
 - MapLibre GL JS
 - CSS próprio
 - dados tipados e versionados no repositório
+- snapshot GeoJSON local das UFs, derivado do Serviço de Dados do IBGE
 
-A escolha favorece um site majoritariamente estático, SEO, manutenção simples e deploy direto na Vercel. A M5 continua sem banco de dados: ontologia, evidências, localizações, extrações e regras analíticas permanecem versionadas no Git.
+A escolha favorece um site majoritariamente estático, SEO, manutenção simples e deploy direto na Vercel. A M5 continua sem banco de dados: ontologia, evidências, localizações, extrações, malha territorial e regras analíticas permanecem versionadas no Git.
 
 ## Rodando localmente
 
@@ -42,15 +45,33 @@ npm run dev
 
 Depois abra `http://localhost:3000`.
 
-Para validar o build de produção:
+Para validar os dados geográficos e o build de produção:
 
 ```bash
+npm run check:data
 npm run build
+```
+
+A atualização da malha é uma ação explícita, não parte do build:
+
+```bash
+npm run data:update:ufs
+npm run check:data
 ```
 
 ## Estrutura
 
 ```text
+public/
+└── data/maps/
+    ├── ibge-ufs-min.geojson        # snapshot local da malha mínima das UFs
+    ├── ibge-ufs-min.manifest.json  # proveniência + SHA-256
+    └── README.md                    # política de origem/atualização
+
+scripts/
+├── update-ibge-states.mjs          # coleta reproduzível nas APIs oficiais do IBGE
+└── validate-map-data.mjs           # invariantes + integridade do snapshot
+
 src/
 ├── app/
 │   ├── page.tsx                    # entrada da cartografia
@@ -77,7 +98,7 @@ src/
 ├── data/
 │   ├── catalog.ts                  # ontologia + base de editais
 │   ├── exams.ts                    # corpus de provas reais
-│   ├── geography.ts                # localizações normalizadas + proveniência
+│   ├── geography.ts                # localizações normalizadas + URL local da malha
 │   └── granular.ts                 # extrações finas + proveniência
 └── lib/
     ├── frequency.ts                # formação de coortes e frequência
@@ -104,6 +125,8 @@ O modo de compatibilidade permite escolher uma trilha de referência. A visualiz
 
 A cobertura incompleta permanece visível. Perfis descritos somente como `múltiplas localidades` ou com abrangência nacional aparecem fora do mapa até uma decomposição documental suficientemente precisa.
 
+A geometria das UFs é servida localmente de `public/data/maps/ibge-ufs-min.geojson`. O snapshot é produzido pelas APIs oficiais de Malhas e Localidades do IBGE com `qualidade=minima`; origem, instante de coleta, parâmetros e hash ficam no manifesto ao lado do arquivo. O build valida a integridade do dataset antes de compilar a aplicação.
+
 ## Corpus de provas
 
 A M4 inaugurou a ingestão de cadernos reais. Todos entram inicialmente com `coverage: "parcial"`: já há classificação temática útil, mas ainda não se afirma que cada questão foi exaustivamente rotulada.
@@ -122,13 +145,12 @@ Presença não representa peso, número de questões, dificuldade ou probabilida
 ## Próximos marcos
 
 1. decompor as localidades ainda registradas como `múltiplas localidades`;
-2. substituir a malha estadual carregada remotamente por uma malha brasileira simplificada e versionada com origem/licença explícitas;
-3. separar, quando necessário, local de prova, lotação, exercício e abrangência;
-4. classificar o corpus de provas no nível `questão → tópico(s)`;
-5. criar uma métrica separada de incidência observada em provas;
-6. permitir camada opcional de provas no mapa sem misturá-la ao catálogo de editais;
-7. ampliar o corpus com mais regiões, bancas e famílias institucionais;
-8. somente depois consolidar infraestrutura e deploy na Vercel.
+2. separar, quando necessário, local de prova, lotação, exercício e abrangência;
+3. classificar o corpus de provas no nível `questão → tópico(s)`;
+4. criar uma métrica separada de incidência observada em provas;
+5. permitir camada opcional de provas no mapa sem misturá-la ao catálogo de editais;
+6. ampliar o corpus com mais regiões, bancas e famílias institucionais;
+7. somente depois consolidar infraestrutura e deploy na Vercel.
 
 ## Princípio do projeto
 

@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run check:data && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check:data": "node scripts/validate-map-data.mjs",
+    "data:update:ufs": "node scripts/update-ibge-states.mjs"
   },
   "dependencies": {
     "maplibre-gl": "^5.7.1",

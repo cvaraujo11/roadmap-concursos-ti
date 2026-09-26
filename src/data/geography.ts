@@ -1,7 +1,7 @@
 import type { ContestLocation } from "@/lib/types";
 
-export const BRAZIL_STATES_GEOJSON =
-  "https://raw.githubusercontent.com/codeforgermany/click_that_hood/main/public/data/brazil-states.geojson";
+export const BRAZIL_STATES_GEOJSON = "/data/maps/ibge-ufs-min.geojson";
+export const BRAZIL_STATES_GEOJSON_MANIFEST = "/data/maps/ibge-ufs-min.manifest.json";
 
 export const stateNameToUf: Record<string, string> = {
   Acre: "AC",

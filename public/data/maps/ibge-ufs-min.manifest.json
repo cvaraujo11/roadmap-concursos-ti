@@ -1,0 +1,29 @@
+{
+  "dataset": "Malha mínima das Unidades da Federação do Brasil",
+  "provider": "Instituto Brasileiro de Geografia e Estatística (IBGE)",
+  "artifact": "/data/maps/ibge-ufs-min.geojson",
+  "format": "GeoJSON",
+  "crs": "coordenadas geográficas fornecidas pela API de Malhas do IBGE",
+  "featureCount": 27,
+  "quality": "minima",
+  "intraregion": "UF",
+  "retrievedAt": "2026-09-26T21:10:35.951Z",
+  "sha256": "9faca7180832bb06887aa44c6033c0840f361c6c6564889121c00e59fffa34df",
+  "sources": {
+    "mesh": "https://servicodados.ibge.gov.br/api/v4/malhas/paises/BR?formato=application/vnd.geo+json&qualidade=minima&intrarregiao=UF",
+    "stateMetadata": "https://servicodados.ibge.gov.br/api/v1/localidades/estados",
+    "documentation": "https://servicodados.ibge.gov.br/api/docs/malhas?versao=3",
+    "openDataPolicy": "https://www.ibge.gov.br/acesso-informacao/dados-abertos.html"
+  },
+  "rights": {
+    "status": "Dados públicos disponibilizados pelo IBGE no contexto de sua Política de Dados Abertos.",
+    "licenseIdentifier": null,
+    "licenseNote": "O endpoint consumido não declara no payload um identificador de licença SPDX ou Creative Commons específico para esta malha; o projeto preserva a atribuição ao IBGE e registra a política oficial de dados abertos sem inventar uma licença mais específica.",
+    "attribution": "Fonte: Instituto Brasileiro de Geografia e Estatística (IBGE)."
+  },
+  "generation": {
+    "script": "scripts/update-ibge-states.mjs",
+    "transformation": "Junção da malha mínima oficial com nome/sigla da API de Localidades; sem alteração das geometrias retornadas pelo IBGE."
+  },
+  "note": "O arquivo é versionado no repositório para que o mapa não dependa de uma origem geográfica externa em tempo de execução."
+}
