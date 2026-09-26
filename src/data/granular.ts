@@ -9,7 +9,7 @@ export type TrackLike = {
 
 export interface GranularExtraction {
   trackId: string;
-  topics: string[];
+  topics?: string[];
   sourceUrl: string;
   sourceLabel: string;
   sourceLocation: string;
@@ -60,6 +60,22 @@ export const extraTopics: Topic[] = [
 export const topicCatalog: Topic[] = [...baseTopics, ...extraTopics];
 
 export const granularExtractions: GranularExtraction[] = [
+  {
+    trackId: "dataprev-2026-gestao-servicos",
+    sourceUrl: "https://conhecimento.fgv.br/concursos/dataprev26",
+    sourceLabel: "DATAPREV 2026 — edital retificado e conteúdo programático do Perfil 6",
+    sourceLocation: "conteúdo programático específico do Perfil 6: Gestão de Serviços de TIC",
+    verifiedAt: "2026-09-26",
+    note: "Os tópicos desta trilha permanecem versionados no catálogo-base. Este registro documenta a proveniência da decomposição usada nas comparações e frequências da cartografia.",
+  },
+  {
+    trackId: "ufpe-2023-analista-sistemas",
+    sourceUrl: "https://www.neppag.ufpe.br/progepe/concurso-de-tecnicos-administrativos",
+    sourceLabel: "UFPE — Concurso TAE 2023, Edital 10/2023 e retificações",
+    sourceLocation: "conteúdo programático de Analista de Tecnologia da Informação — Área: Sistemas",
+    verifiedAt: "2026-09-26",
+    note: "Os tópicos desta trilha permanecem versionados no catálogo-base. A taxonomia normaliza itens do conteúdo programático para possibilitar comparação com outros concursos.",
+  },
   {
     trackId: "transpetro-infra",
     sourceUrl: "https://transpetro.com.br/lumis/portal/file/fileDownload.jsp?fileId=4028908D88A1B53B018AE286A4C73E3F",
