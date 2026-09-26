@@ -13,6 +13,7 @@ export type OrgFamily =
   | "judiciario"
   | "controle"
   | "mp-dpe"
+  | "legislativo"
   | "executivo";
 
 export type KnowledgeSlug =
@@ -85,4 +86,27 @@ export interface OrgFamilyMeta {
   slug: OrgFamily;
   name: string;
   description: string;
+}
+
+export interface ExamEvidence {
+  id: string;
+  institution: string;
+  cycle: string;
+  organizer: string;
+  orgFamily: OrgFamily;
+  title: string;
+  areas: AreaSlug[];
+  knowledge: KnowledgeSlug[];
+  observedTopics: TopicSlug[];
+  level: "medio" | "superior";
+  scope: "caderno-completo" | "recorte-especificos";
+  objectiveQuestions?: number;
+  discursiveQuestions?: number;
+  specificQuestionRange?: string;
+  relatedTrackId?: string;
+  officialUrl?: string;
+  sourceFile: string;
+  sourceSha256: string;
+  coverage: "parcial" | "revisada";
+  sourceNote: string;
 }
