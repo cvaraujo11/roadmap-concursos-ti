@@ -5,4 +5,5 @@
 - [M3 — Frequência, denominador e núcleo observado](./M3.md)
 - [M4 — Provas reais como segunda camada de evidência](./M4.md)
 - [M5 — Cartografia geográfica](./M5.md)
+- [M5 — Geodados auditáveis](./M5-geodata.md)
 - [Fontes da cartografia](./sources.md)
