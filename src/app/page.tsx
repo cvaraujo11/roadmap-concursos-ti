@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { allTracks, areas, contests, knowledge, orgFamilies } from "@/data/catalog";
+import { exams } from "@/data/exams";
 import { granularTrackCount, topicCatalog } from "@/data/granular";
 
 export default function HomePage() {
@@ -12,20 +13,21 @@ export default function HomePage() {
           <div className="eyebrow">Cartografia aberta · concursos públicos de TI</div>
           <h1>Não estude para “qualquer concurso”. Primeiro, enxergue o mapa.</h1>
           <p className="lead">
-            Descubra famílias de cargos, áreas de atuação, conhecimentos reaproveitáveis e editais reais usados como evidência. A ideia é transformar “por onde começo?” em uma decisão navegável.
+            Descubra famílias de cargos, áreas de atuação, conhecimentos reaproveitáveis, editais e provas reais usados como evidência. A ideia é transformar “por onde começo?” em uma decisão navegável.
           </p>
           <div className="actions">
             <Link className="button primary" href="/comecar">Quero começar do zero</Link>
             <Link className="button" href="/mapa">Explorar a cartografia</Link>
             <Link className="button" href="/frequencia">Ver o que se repete</Link>
+            <Link className="button" href="/provas">Explorar provas reais</Link>
           </div>
           <div className="stats">
             <div className="stat"><strong>{areas.length}</strong><span>famílias de atuação</span></div>
-            <div className="stat"><strong>{orgFamilies.length}</strong><span>famílias institucionais</span></div>
+            <div className="stat"><strong>{orgFamilies.length}</strong><span>famílias institucionais no catálogo de editais</span></div>
             <div className="stat"><strong>{contests.length}</strong><span>certames documentados</span></div>
-            <div className="stat"><strong>{allTracks.length}</strong><span>trilhas/perfis mapeados</span></div>
+            <div className="stat"><strong>{exams.length}</strong><span>provas/recortes observados</span></div>
           </div>
-          <p className="hero-footnote">{knowledge.length} macroconhecimentos · {topicCatalog.length} tópicos na taxonomia · {granularTracks} trilhas já decompostas em nível fino</p>
+          <p className="hero-footnote">{knowledge.length} macroconhecimentos · {topicCatalog.length} tópicos na taxonomia · {granularTracks} trilhas já decompostas em nível fino · {allTracks.length} perfis mapeados</p>
         </div>
       </section>
 
@@ -61,8 +63,31 @@ export default function HomePage() {
       <section className="section">
         <div className="container">
           <div className="section-heading">
+            <div><div className="eyebrow">M4 · prova real</div><h2>Separe escopo declarado de cobrança observada.</h2></div>
+            <p>Editais dizem o universo potencial. Cadernos de prova mostram a realização concreta desse universo por uma banca, em um cargo e ciclo específicos.</p>
+          </div>
+          <div className="route-grid">
+            <article className="route-card">
+              <span className="number">01 · corpus observado</span>
+              <h3>Navegue por provas de controle, Judiciário, MPs/Defensorias, Legislativo, estatais e Executivo</h3>
+              <p className="muted">Cada registro guarda banca, estrutura, tópicos observados e fingerprint do arquivo usado na curadoria.</p>
+              <Link className="card-link" href="/provas">Abrir provas →</Link>
+            </article>
+            <article className="route-card">
+              <span className="number">02 · duas métricas, sem mistura</span>
+              <h3>Frequência de edital continua separada de incidência em prova</h3>
+              <p className="muted">A M4 prepara a futura métrica de incidência observada sem contaminar o denominador metodológico construído na M3.</p>
+              <Link className="card-link" href="/metodologia">Ver metodologia →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-heading">
             <div><div className="eyebrow">M3 · frequência</div><h2>Do “isso cai muito” para uma conta auditável.</h2></div>
-            <p>O projeto agora calcula frequência apenas junto do recorte e do denominador que sustentam o percentual.</p>
+            <p>O projeto calcula frequência apenas junto do recorte e do denominador que sustentam o percentual.</p>
           </div>
           <div className="route-grid">
             <article className="route-card">
@@ -104,7 +129,7 @@ export default function HomePage() {
         <div className="container">
           <div className="section-heading">
             <div><div className="eyebrow">Onde os cargos vivem</div><h2>Navegue também pela família institucional.</h2></div>
-            <p>Empresas públicas, universidades, tribunais, controle, MPs/Defensorias e Executivo têm estruturas de carreira e combinações de conteúdo diferentes.</p>
+            <p>Empresas públicas, universidades, tribunais, controle, MPs/Defensorias e Executivo têm estruturas de carreira e combinações de conteúdo diferentes. A camada de provas já adiciona também exemplos do Legislativo.</p>
           </div>
           <div className="card-grid">
             {orgFamilies.map((family) => (
