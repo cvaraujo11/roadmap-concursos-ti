@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/Nav";
 import "./globals.css";
 import "./m1.css";
+import "./m2.css";
 
 export const metadata: Metadata = {
   title: "Roadmap Concursos TI",
