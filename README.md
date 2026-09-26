@@ -2,36 +2,36 @@
 
 Cartografia aberta dos concursos públicos de Tecnologia da Informação no Brasil.
 
-O projeto nasce de uma pergunta recorrente: **“sou de TI e quero estudar para concurso; por onde começo?”**. Em vez de responder com uma lista genérica de disciplinas, o roadmap organiza o espaço de oportunidades por áreas de atuação, famílias institucionais, conhecimentos reaproveitáveis, editais e provas reais usados como evidência.
+O projeto nasce de uma pergunta recorrente: **“sou de TI e quero estudar para concurso; por onde começo?”**. Em vez de responder com uma lista genérica de disciplinas, o roadmap organiza o espaço de oportunidades por áreas de atuação, famílias institucionais, conhecimentos reaproveitáveis, editais, provas reais e agora também localização territorial normalizada.
 
-## Estado atual — M4
+## Estado atual — M5
 
-A M4 acrescenta uma segunda camada empírica: **cadernos de prova efetivamente aplicados**, mantidos metodologicamente separados do corpus de editais.
+A M5 acrescenta uma terceira dimensão à cartografia: **onde as trilhas já catalogadas aparecem no território brasileiro**.
 
 - percurso guiado para quem ainda não escolheu um concurso;
-- mapa filtrável de perfis/trilhas;
-- 7 famílias de atuação em TI;
-- base versionada de certames com fonte oficial e data de verificação;
-- taxonomia com macroconhecimentos e tópicos finos;
-- comparação interativa entre duas trilhas;
-- frequência de editais com denominador explícito e núcleo observado;
-- corpus inicial com 16 provas/recortes reais de FGV, FCC e Cebraspe;
-- nova rota `/provas`, filtrável por área, família institucional e banca;
-- páginas `/provas/[id]` com estrutura, tópicos observados e proveniência;
-- fingerprint SHA-256 dos PDFs usados na curadoria, sem redistribuir os binários;
-- presença em edital e presença em prova tratadas como evidências diferentes.
+- mapa conceitual filtrável de perfis/trilhas;
+- mapa geográfico do Brasil em `/mapa-geografico`;
+- MapLibre GL JS integrado ao Next.js, sem novo backend;
+- localização modelada como relação `certame → trilha → território`, e não como simples string;
+- filtros geográficos por área, família institucional, macroconhecimento e ano;
+- modo de compatibilidade que usa Jaccard entre macroconhecimentos de uma trilha de referência e trilhas geocodificadas;
+- cobertura geográfica explícita: total do recorte, trilhas geocodificadas, UFs representadas e itens ainda sem ponto normalizado;
+- `múltiplas localidades` e abrangências nacionais não são convertidas artificialmente em coordenadas;
+- corpus de editais e corpus de provas continuam metodologicamente separados;
+- frequência de edital permanece com denominador explícito e incidência em prova continua reservada para uma métrica própria.
 
-A camada de provas inclui exemplos de controle, Judiciário, MPs/Defensorias, Legislativo, empresas públicas e Executivo, com perfis de Banco de Dados, Ciência de Dados, Engenharia/Arquitetura de Dados, Redes e Infraestrutura.
+A M5 foi inspirada no padrão cartográfico do projeto MIT [`Comm4nd0/conflict-map`](https://github.com/Comm4nd0/conflict-map), especialmente no uso do mapa como interface, GeoJSON, camadas de preenchimento/pontos e foco territorial. A arquitetura FastAPI/SQLite/pipeline daquele projeto não foi portada: o Roadmap permanece uma aplicação Next.js com dados versionados no Git.
 
 ## Stack
 
 - Next.js 15 (App Router)
 - TypeScript
 - React 19
-- CSS próprio, sem biblioteca de componentes nesta fase
+- MapLibre GL JS
+- CSS próprio
 - dados tipados e versionados no repositório
 
-A escolha favorece um site majoritariamente estático, SEO, manutenção simples e deploy direto na Vercel. A M4 continua sem banco de dados: ontologia, evidência, extrações e regras analíticas permanecem versionadas no Git.
+A escolha favorece um site majoritariamente estático, SEO, manutenção simples e deploy direto na Vercel. A M5 continua sem banco de dados: ontologia, evidências, localizações, extrações e regras analíticas permanecem versionadas no Git.
 
 ## Rodando localmente
 
@@ -55,7 +55,8 @@ src/
 ├── app/
 │   ├── page.tsx                    # entrada da cartografia
 │   ├── comecar/                    # percurso para iniciantes
-│   ├── mapa/                       # explorador filtrável
+│   ├── mapa/                       # explorador conceitual filtrável
+│   ├── mapa-geografico/            # mapa territorial do Brasil
 │   ├── concursos/                  # evidências de editais/certames
 │   ├── provas/                     # corpus de cadernos reais
 │   ├── provas/[id]/                # evidência de uma prova + fingerprint
@@ -68,6 +69,7 @@ src/
 │   └── trilhas/[id]/               # árvore de um perfil + proveniência
 ├── components/
 │   ├── CompareExplorer.tsx
+│   ├── ContestGeoMap.tsx           # MapLibre + filtros + agregações territoriais
 │   ├── ExamExplorer.tsx
 │   ├── FrequencyExplorer.tsx
 │   ├── MapExplorer.tsx
@@ -75,59 +77,58 @@ src/
 ├── data/
 │   ├── catalog.ts                  # ontologia + base de editais
 │   ├── exams.ts                    # corpus de provas reais
+│   ├── geography.ts                # localizações normalizadas + proveniência
 │   └── granular.ts                 # extrações finas + proveniência
 └── lib/
     ├── frequency.ts                # formação de coortes e frequência
     └── types.ts
 ```
 
-## Dois corpora, duas perguntas
+## Três camadas, perguntas diferentes
 
-A cartografia agora diferencia explicitamente:
+A cartografia diferencia explicitamente:
 
 1. **Edital/programa** — o universo declarado de assuntos que poderia ser cobrado naquele perfil.
 2. **Prova aplicada** — os assuntos efetivamente mobilizados pela banca no caderno observado.
+3. **Geografia** — onde a trilha possui localização suficientemente normalizada para ser representada sem inventar precisão.
 
-A página `/frequencia` continua calculando presença em **trilhas de edital**. O corpus de `/provas` ainda não entra nesses percentuais.
+Essas três camadas não compartilham automaticamente o mesmo denominador.
 
-Isso evita um erro metodológico importante: concluir que um assunto teve alta incidência em questões apenas porque apareceu em muitos programas — ou, no sentido inverso, inferir o escopo completo de um cargo a partir de uma única aplicação.
+## Cartografia geográfica
+
+A localização é armazenada em `ContestLocation`, com certame, trilha, escopo, precisão, UF/cidade, coordenadas e nota de proveniência.
+
+O modo padrão de `/mapa-geografico` agrega **trilhas distintas** por UF. Portanto, um estado mais intenso significa apenas que mais trilhas geocodificadas do recorte estão associadas a ele. Não significa mais vagas, maior recorrência histórica de concursos ou maior probabilidade de oportunidade futura.
+
+O modo de compatibilidade permite escolher uma trilha de referência. A visualização usa Jaccard entre macroconhecimentos e mostra, em cada UF, o maior reaproveitamento macro observado entre as trilhas geocodificadas do recorte.
+
+A cobertura incompleta permanece visível. Perfis descritos somente como `múltiplas localidades` ou com abrangência nacional aparecem fora do mapa até uma decomposição documental suficientemente precisa.
 
 ## Corpus de provas
 
-A M4 inaugura a ingestão com 16 cadernos/recortes. Todos entram inicialmente com `coverage: "parcial"`: já há classificação temática útil, mas ainda não se afirma que cada questão foi exaustivamente rotulada.
+A M4 inaugurou a ingestão de cadernos reais. Todos entram inicialmente com `coverage: "parcial"`: já há classificação temática útil, mas ainda não se afirma que cada questão foi exaustivamente rotulada.
 
-Cada prova registra:
-
-- instituição, ciclo, banca e cargo/especialidade;
-- família institucional e áreas de TI;
-- estrutura conhecida da aplicação;
-- macroconhecimentos e tópicos observados;
-- página oficial quando confirmada;
-- nome do arquivo usado como fonte;
-- SHA-256 do arquivo;
-- nota sobre a cobertura da curadoria.
-
-Os PDFs não são adicionados ao Git. O hash identifica exatamente o arquivo utilizado sem transformar o repositório em espelho de cadernos protegidos por direitos autorais.
+Cada prova registra instituição, ciclo, banca, cargo/especialidade, estrutura conhecida, temas observados, fonte e SHA-256 do arquivo usado na curadoria. Os PDFs não são adicionados ao Git.
 
 ## Frequência
 
-A página `/frequencia` possui dois modos para o corpus de editais:
+A página `/frequencia` continua operando apenas sobre o corpus de editais:
 
-- **macro**: usa todas as trilhas do recorte e conta presença de macroconhecimentos;
-- **granular**: usa somente trilhas já decompostas em tópicos e conta presença de tópicos normalizados.
+- **macro**: todas as trilhas elegíveis do recorte;
+- **granular**: somente trilhas cujo programa já foi decomposto em tópicos.
 
-A unidade estatística é a **trilha/cargo-perfil** e o denominador é sempre exibido. Presença não representa peso, número de questões, dificuldade ou probabilidade futura.
+Presença não representa peso, número de questões, dificuldade ou probabilidade futura.
 
 ## Próximos marcos
 
-1. classificar o corpus de provas no nível `questão → tópico(s)`;
-2. criar uma métrica separada de incidência observada em provas, sempre com denominador explícito;
-3. ampliar o corpus com mais bancas, regiões e famílias institucionais;
-4. decompor mais editais em tópicos finos para aproximar as duas camadas de evidência;
-5. registrar requisitos de formação, região, remuneração e estrutura objetiva da prova de forma normalizada;
-6. permitir comparação de mais de duas trilhas e construção de uma trilha pré-edital personalizada;
-7. definir pipeline de curadoria e contribuição colaborativa;
-8. somente depois consolidar a estratégia de infraestrutura e deploy na Vercel.
+1. decompor as localidades ainda registradas como `múltiplas localidades`;
+2. substituir a malha estadual carregada remotamente por uma malha brasileira simplificada e versionada com origem/licença explícitas;
+3. separar, quando necessário, local de prova, lotação, exercício e abrangência;
+4. classificar o corpus de provas no nível `questão → tópico(s)`;
+5. criar uma métrica separada de incidência observada em provas;
+6. permitir camada opcional de provas no mapa sem misturá-la ao catálogo de editais;
+7. ampliar o corpus com mais regiões, bancas e famílias institucionais;
+8. somente depois consolidar infraestrutura e deploy na Vercel.
 
 ## Princípio do projeto
 

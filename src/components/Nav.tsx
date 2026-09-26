@@ -3,6 +3,7 @@ import Link from "next/link";
 const links = [
   ["/comecar", "Por onde começar"],
   ["/mapa", "Mapa"],
+  ["/mapa-geografico", "Mapa BR"],
   ["/concursos", "Concursos"],
   ["/provas", "Provas"],
   ["/comparar", "Comparar"],

@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { allTracks, areas, contests, knowledge, orgFamilies } from "@/data/catalog";
 import { exams } from "@/data/exams";
+import { geocodedLocations } from "@/data/geography";
 import { granularTrackCount, topicCatalog } from "@/data/granular";
 
 export default function HomePage() {
   const granularTracks = granularTrackCount(allTracks);
+  const geocodedTracks = new Set(geocodedLocations.map((location) => location.trackId)).size;
 
   return (
     <>
@@ -13,21 +15,22 @@ export default function HomePage() {
           <div className="eyebrow">Cartografia aberta · concursos públicos de TI</div>
           <h1>Não estude para “qualquer concurso”. Primeiro, enxergue o mapa.</h1>
           <p className="lead">
-            Descubra famílias de cargos, áreas de atuação, conhecimentos reaproveitáveis, editais e provas reais usados como evidência. A ideia é transformar “por onde começo?” em uma decisão navegável.
+            Descubra famílias de cargos, áreas de atuação, conhecimentos reaproveitáveis, editais, provas reais e agora também a distribuição territorial já normalizada da base.
           </p>
           <div className="actions">
             <Link className="button primary" href="/comecar">Quero começar do zero</Link>
             <Link className="button" href="/mapa">Explorar a cartografia</Link>
+            <Link className="button" href="/mapa-geografico">Abrir mapa do Brasil</Link>
             <Link className="button" href="/frequencia">Ver o que se repete</Link>
             <Link className="button" href="/provas">Explorar provas reais</Link>
           </div>
           <div className="stats">
             <div className="stat"><strong>{areas.length}</strong><span>famílias de atuação</span></div>
-            <div className="stat"><strong>{orgFamilies.length}</strong><span>famílias institucionais no catálogo de editais</span></div>
             <div className="stat"><strong>{contests.length}</strong><span>certames documentados</span></div>
             <div className="stat"><strong>{exams.length}</strong><span>provas/recortes observados</span></div>
+            <div className="stat"><strong>{geocodedTracks}</strong><span>trilhas com geografia normalizada</span></div>
           </div>
-          <p className="hero-footnote">{knowledge.length} macroconhecimentos · {topicCatalog.length} tópicos na taxonomia · {granularTracks} trilhas já decompostas em nível fino · {allTracks.length} perfis mapeados</p>
+          <p className="hero-footnote">{orgFamilies.length} famílias institucionais no catálogo de editais · {knowledge.length} macroconhecimentos · {topicCatalog.length} tópicos na taxonomia · {granularTracks} trilhas já decompostas em nível fino · {allTracks.length} perfis mapeados</p>
         </div>
       </section>
 
@@ -35,7 +38,7 @@ export default function HomePage() {
         <div className="container">
           <div className="section-heading">
             <div><div className="eyebrow">Três portas de entrada</div><h2>Comece pelo que você já sabe.</h2></div>
-            <p>Você não precisa escolher um edital antes de começar. O mapa serve para adiar decisões caras e preservar o reaproveitamento do estudo.</p>
+            <p>Você não precisa escolher um edital antes de começar. A cartografia serve para adiar decisões caras e preservar o reaproveitamento do estudo.</p>
           </div>
           <div className="card-grid">
             <article className="card">
@@ -51,10 +54,33 @@ export default function HomePage() {
               <Link className="card-link" href="/mapa">Filtrar por área →</Link>
             </article>
             <article className="card">
-              <span className="card-kicker">Já tenho referências</span>
-              <h3>Quero comparar concursos</h3>
-              <p>Compare duas trilhas no nível macro e, quando os editais já foram decompostos, também no nível de tópicos.</p>
-              <Link className="card-link" href="/comparar">Comparar duas trilhas →</Link>
+              <span className="card-kicker">Quero enxergar o território</span>
+              <h3>Onde essas trilhas aparecem no Brasil?</h3>
+              <p>Veja UFs e localidades já normalizadas e use uma trilha como referência de compatibilidade.</p>
+              <Link className="card-link" href="/mapa-geografico">Abrir mapa BR →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-heading">
+            <div><div className="eyebrow">M5 · território</div><h2>Da ontologia para o mapa do Brasil.</h2></div>
+            <p>A localização virou uma camada normalizada e auditável. Estados mais intensos significam apenas mais trilhas geocodificadas no recorte atual — não maior oferta real de oportunidades.</p>
+          </div>
+          <div className="route-grid">
+            <article className="route-card">
+              <span className="number">01 · geografia normalizada</span>
+              <h3>Filtre o mapa por área, família institucional, conhecimento e ano</h3>
+              <p className="muted">Trilhas nacionais ou descritas apenas como “múltiplas localidades” permanecem explicitamente fora do mapa até serem decompostas.</p>
+              <Link className="card-link" href="/mapa-geografico">Explorar território →</Link>
+            </article>
+            <article className="route-card">
+              <span className="number">02 · mobilidade entre concursos</span>
+              <h3>Use uma trilha como referência e veja onde existe reaproveitamento macro</h3>
+              <p className="muted">A cor de compatibilidade usa Jaccard entre macroconhecimentos já catalogados e mantém o denominador conceitual separado de vagas e incidência de prova.</p>
+              <Link className="card-link" href="/comparar">Entender a comparação →</Link>
             </article>
           </div>
         </div>
