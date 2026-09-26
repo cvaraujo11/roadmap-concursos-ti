@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const steps = [
   ["Pare de procurar um “concurso genérico”", "Concursos de TI variam muito. Comece identificando famílias de atuação e instituições, não uma lista aleatória de disciplinas."],
-  ["Construa um núcleo reaproveitável", "Redes, banco de dados, segurança, engenharia de software e governança aparecem em combinações diferentes. O objetivo inicial é aprender fundamentos que não morrem quando o edital muda."],
+  ["Construa um núcleo reaproveitável", "Redes, banco de dados, segurança, engenharia de software e governança aparecem em combinações diferentes. Use a frequência observada para verificar onde esses blocos realmente reaparecem na amostra, sem tratá-la como verdade universal."],
   ["Escolha duas ou três famílias de oportunidade", "Exemplo: empresas públicas + universidades/IFs + Judiciário. Isso reduz dispersão sem te prender a um único órgão."],
   ["Use editais anteriores como dados", "Leia requisitos, banca, conteúdo programático, pesos e formato da prova. O edital é evidência; cursos e opiniões são interpretações."],
   ["Especialize quando o padrão aparecer", "Se suas oportunidades convergirem para infraestrutura, desenvolvimento, dados, segurança ou gestão, aprofunde a trilha sem abandonar o núcleo comum."],
@@ -30,10 +30,11 @@ export default function ComecarPage() {
             ))}
           </div>
           <div className="notice" style={{ marginTop: 22 }}>
-            Regra prática: se você ainda não escolheu uma área, evite começar por tecnologias extremamente específicas. Prefira fundamentos com alto reaproveitamento e use a cartografia para observar onde eles reaparecem.
+            Regra prática: se você ainda não escolheu uma área, evite começar por tecnologias extremamente específicas. Prefira fundamentos com alto reaproveitamento e verifique o padrão observado na cartografia antes de estreitar sua rota.
           </div>
           <div className="actions" style={{ marginTop: 22 }}>
             <Link className="button primary" href="/mapa">Abrir mapa</Link>
+            <Link className="button" href="/frequencia">Ver frequência observada</Link>
             <Link className="button" href="/concursos">Ver evidências</Link>
           </div>
         </div>
