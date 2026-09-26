@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { allTracks, areas, knowledgeName } from "@/data/catalog";
+import { coverageForTrack, topicsForTrack } from "@/data/granular";
 import type { AreaSlug } from "@/lib/types";
 
 export function generateStaticParams() {
@@ -57,15 +58,22 @@ export default async function AreaPage({ params }: { params: Promise<{ slug: str
             <Link className="button" href={`/mapa?area=${area.slug}`}>Abrir no mapa filtrável</Link>
           </div>
           <div className="map-grid">
-            {tracks.map((track) => (
-              <article className="track-card" key={track.id}>
-                <div className="track-topline"><span>{track.contest.institution}</span><span>{track.contest.year}</span></div>
-                <h3>{track.name}</h3>
-                <p className="muted">{track.locality} · {track.coverage === "topicos" ? `${track.topics?.length ?? 0} tópicos decompostos` : "cobertura macro"}</p>
-                <div className="chips">{track.knowledge.map((item) => <span className="chip" key={item}>{knowledgeName(item)}</span>)}</div>
-                <a href={track.contest.sourceUrl} target="_blank" rel="noreferrer">Fonte oficial ↗</a>
-              </article>
-            ))}
+            {tracks.map((track) => {
+              const topicCount = topicsForTrack(track).length;
+              const granular = coverageForTrack(track) === "topicos";
+              return (
+                <article className="track-card" key={track.id}>
+                  <div className="track-topline"><span>{track.contest.institution}</span><span>{track.contest.year}</span></div>
+                  <h3>{track.name}</h3>
+                  <p className="muted">{track.locality} · {granular ? `${topicCount} tópicos decompostos` : "cobertura macro"}</p>
+                  <div className="chips">{track.knowledge.map((item) => <span className="chip" key={item}>{knowledgeName(item)}</span>)}</div>
+                  <div className="track-actions">
+                    <Link href={`/trilhas/${track.id}`}>Abrir trilha →</Link>
+                    <a href={track.contest.sourceUrl} target="_blank" rel="noreferrer">Fonte ↗</a>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
