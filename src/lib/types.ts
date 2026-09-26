@@ -110,3 +110,20 @@ export interface ExamEvidence {
   coverage: "parcial" | "revisada";
   sourceNote: string;
 }
+
+export type GeographyScope = "municipio" | "estado" | "multiplos-estados" | "nacional";
+export type GeographyPrecision = "cidade" | "estado" | "nao-geocodificado";
+
+export interface ContestLocation {
+  id: string;
+  contestId: string;
+  trackId: string;
+  scope: GeographyScope;
+  precision: GeographyPrecision;
+  uf?: string;
+  city?: string;
+  latitude?: number;
+  longitude?: number;
+  label: string;
+  sourceNote: string;
+}
