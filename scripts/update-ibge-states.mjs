@@ -12,6 +12,7 @@ const MESH_URL =
   "https://servicodados.ibge.gov.br/api/v4/malhas/paises/BR?formato=application/vnd.geo+json&qualidade=minima&intrarregiao=UF";
 const STATES_URL = "https://servicodados.ibge.gov.br/api/v1/localidades/estados";
 const DOCS_URL = "https://servicodados.ibge.gov.br/api/docs/malhas?versao=3";
+const OPEN_DATA_URL = "https://www.ibge.gov.br/acesso-informacao/dados-abertos.html";
 
 const EXPECTED_UFS = [
   "AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO",
@@ -112,6 +113,13 @@ async function main() {
       mesh: MESH_URL,
       stateMetadata: STATES_URL,
       documentation: DOCS_URL,
+      openDataPolicy: OPEN_DATA_URL,
+    },
+    rights: {
+      status: "Dados públicos disponibilizados pelo IBGE no contexto de sua Política de Dados Abertos.",
+      licenseIdentifier: null,
+      licenseNote: "O endpoint consumido não declara no payload um identificador de licença SPDX ou Creative Commons específico para esta malha; o projeto preserva a atribuição ao IBGE e registra a política oficial de dados abertos sem inventar uma licença mais específica.",
+      attribution: "Fonte: Instituto Brasileiro de Geografia e Estatística (IBGE).",
     },
     generation: {
       script: "scripts/update-ibge-states.mjs",
