@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
-import { allTracks, knowledgeName, topicName } from "@/data/catalog";
+import { allTracks, knowledgeName } from "@/data/catalog";
+import { coverageForTrack, granularTopicName, topicsForTrack } from "@/data/granular";
 
 function overlap(a: string[], b: string[]) {
   const setA = new Set(a);
@@ -29,8 +31,10 @@ export function CompareExplorer() {
   const right = allTracks.find((item) => item.id === rightId) ?? allTracks[1];
 
   const macro = useMemo(() => overlap(left.knowledge, right.knowledge), [left, right]);
-  const hasGranular = Boolean(left.topics?.length && right.topics?.length);
-  const granular = useMemo(() => overlap(left.topics ?? [], right.topics ?? []), [left, right]);
+  const leftTopics = topicsForTrack(left);
+  const rightTopics = topicsForTrack(right);
+  const hasGranular = coverageForTrack(left) === "topicos" && coverageForTrack(right) === "topicos";
+  const granular = useMemo(() => overlap(leftTopics, rightTopics), [leftTopics, rightTopics]);
 
   return (
     <div className="compare-explorer">
@@ -58,8 +62,23 @@ export function CompareExplorer() {
         <div className="metric">
           <span>Sobreposição granular</span>
           <strong>{hasGranular ? `${granular.value}%` : "—"}</strong>
-          <p>{hasGranular ? "Jaccard entre tópicos já decompostos dos dois editais." : "Disponível quando as duas trilhas tiverem cobertura por tópicos."}</p>
+          <p>{hasGranular ? `Interseção entre ${leftTopics.length} e ${rightTopics.length} tópicos catalogados.` : "Disponível quando as duas trilhas tiverem cobertura por tópicos."}</p>
         </div>
+      </div>
+
+      <div className="compare-columns">
+        <article className="method-card">
+          <span className="card-kicker">Trilha A</span>
+          <h3>{left.contest.institution}</h3>
+          <p>{left.name}</p>
+          <Link className="card-link" href={`/trilhas/${left.id}`}>Abrir cartografia da trilha →</Link>
+        </article>
+        <article className="method-card">
+          <span className="card-kicker">Trilha B</span>
+          <h3>{right.contest.institution}</h3>
+          <p>{right.name}</p>
+          <Link className="card-link" href={`/trilhas/${right.id}`}>Abrir cartografia da trilha →</Link>
+        </article>
       </div>
 
       <section className="compare-block">
@@ -74,9 +93,9 @@ export function CompareExplorer() {
       {hasGranular && (
         <section className="compare-block">
           <div className="eyebrow">Nível fino</div>
-          <h2>Tópicos compartilhados</h2>
+          <h2>{granular.intersection.length} tópicos compartilhados</h2>
           <div className="chips">
-            {granular.intersection.map((slug) => <span className="chip" key={slug}>{topicName(slug)}</span>)}
+            {granular.intersection.map((slug) => <span className="chip" key={slug}>{granularTopicName(slug)}</span>)}
             {granular.intersection.length === 0 && <span className="muted">Nenhum tópico em comum na taxonomia atual.</span>}
           </div>
         </section>
@@ -84,19 +103,19 @@ export function CompareExplorer() {
 
       <div className="compare-columns">
         <article className="method-card">
-          <span className="card-kicker">Só em A</span>
+          <span className="card-kicker">Só em A · macro</span>
           <h3>{left.contest.institution}</h3>
           <div className="chips">{macro.onlyA.map((slug) => <span className="chip" key={slug}>{knowledgeName(slug)}</span>)}</div>
         </article>
         <article className="method-card">
-          <span className="card-kicker">Só em B</span>
+          <span className="card-kicker">Só em B · macro</span>
           <h3>{right.contest.institution}</h3>
           <div className="chips">{macro.onlyB.map((slug) => <span className="chip" key={slug}>{knowledgeName(slug)}</span>)}</div>
         </article>
       </div>
 
       <div className="notice">
-        Percentuais não representam dificuldade, peso na prova ou probabilidade de aprovação. Eles medem apenas interseção da taxonomia já catalogada e ficam mais informativos conforme a cobertura granular cresce.
+        Percentuais não representam dificuldade, peso na prova ou probabilidade de aprovação. Eles medem apenas interseção da taxonomia já catalogada. A extração granular mantém referência ao ponto do edital que a sustenta.
       </div>
     </div>
   );

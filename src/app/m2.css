@@ -1,0 +1,42 @@
+.track-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.track-actions a:first-child { color: var(--accent); }
+.track-actions a:last-child { color: var(--accent-2); }
+
+.knowledge-tree {
+  display: grid;
+  gap: 14px;
+}
+
+.knowledge-branch {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(18,26,48,.72);
+}
+
+.branch-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.branch-head h3 { margin: 0; }
+.branch-head span {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+@media (max-width: 560px) {
+  .branch-head { align-items: flex-start; flex-direction: column; gap: 6px; }
+}
