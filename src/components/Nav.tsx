@@ -4,6 +4,7 @@ const links = [
   ["/comecar", "Por onde começar"],
   ["/mapa", "Mapa"],
   ["/concursos", "Concursos"],
+  ["/provas", "Provas"],
   ["/comparar", "Comparar"],
   ["/frequencia", "Frequência"],
   ["/metodologia", "Metodologia"],
