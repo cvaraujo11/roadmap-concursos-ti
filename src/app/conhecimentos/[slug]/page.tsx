@@ -29,6 +29,10 @@ export default async function KnowledgePage({ params }: { params: Promise<{ slug
             <div className="stat"><strong>{taxonomy.length}</strong><span>tópicos na taxonomia</span></div>
             <div className="stat"><strong>{granularTracks.length}</strong><span>trilhas já decompostas</span></div>
           </div>
+          <div className="actions" style={{ marginTop: 20 }}>
+            <Link className="button primary" href={`/frequencia?conhecimento=${item.slug}`}>Calcular frequência deste conhecimento</Link>
+            <Link className="button" href={`/mapa?conhecimento=${item.slug}`}>Abrir no mapa</Link>
+          </div>
         </div>
       </section>
 
@@ -36,7 +40,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ slug
         <div className="container">
           <div className="section-heading">
             <div><div className="eyebrow">Árvore de conhecimento</div><h2>Tópicos abaixo deste macrotema</h2></div>
-            <p>A taxonomia cresce quando novos editais são decompostos. A contagem abaixo usa apenas trilhas que já possuem extração granular.</p>
+            <p>A taxonomia cresce quando novos editais são decompostos. As contagens abaixo usam apenas trilhas que já possuem extração granular; para proporções, use a página de frequência com denominador explícito.</p>
           </div>
           <div className="topic-grid">
             {taxonomy.map((topic) => {
@@ -58,7 +62,10 @@ export default async function KnowledgePage({ params }: { params: Promise<{ slug
         <div className="container">
           <div className="section-heading">
             <div><div className="eyebrow">Onde aparece</div><h2>Trilhas ligadas a {item.name}</h2></div>
-            <Link className="button" href={`/mapa?conhecimento=${item.slug}`}>Abrir no mapa filtrável</Link>
+            <div className="actions">
+              <Link className="button" href={`/frequencia?conhecimento=${item.slug}`}>Ver frequência</Link>
+              <Link className="button" href={`/mapa?conhecimento=${item.slug}`}>Abrir no mapa filtrável</Link>
+            </div>
           </div>
           <div className="map-grid">
             {tracks.map((track) => {
