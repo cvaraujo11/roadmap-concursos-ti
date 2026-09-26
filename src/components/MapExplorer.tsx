@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { allTracks, areas, knowledge, knowledgeName, topicName } from "@/data/catalog";
+import { allTracks, areas, knowledge, knowledgeName } from "@/data/catalog";
+import { coverageForTrack, granularTopicName, topicsForTrack } from "@/data/granular";
 import type { AreaSlug, KnowledgeSlug } from "@/lib/types";
 
 type Props = {
@@ -54,29 +55,36 @@ export function MapExplorer({ initialArea = "todas", initialTopic = "todos" }: P
       </div>
 
       <div className="map-grid">
-        {visible.map((item) => (
-          <article className="track-card" key={item.id}>
-            <div className="track-topline">
-              <span className="institution">{item.contest.institution}</span>
-              <span>{item.contest.year}</span>
-            </div>
-            <h3>{item.name}</h3>
-            <p className="muted">{item.locality ?? "Localidade conforme edital"} · nível {item.level}</p>
-            <div className="chips">
-              {item.knowledge.map((slug) => (
-                <Link className="chip" key={slug} href={`/conhecimentos/${slug}`}>{knowledgeName(slug)}</Link>
-              ))}
-            </div>
-            {item.topics && item.topics.length > 0 && (
-              <div className="granular-preview">
-                <span className="coverage-badge">{item.topics.length} tópicos decompostos</span>
-                <p>{item.topics.slice(0, 6).map(topicName).join(" · ")}{item.topics.length > 6 ? " · …" : ""}</p>
+        {visible.map((item) => {
+          const extractedTopics = topicsForTrack(item);
+          const isGranular = coverageForTrack(item) === "topicos";
+          return (
+            <article className="track-card" key={item.id}>
+              <div className="track-topline">
+                <span className="institution">{item.contest.institution}</span>
+                <span>{item.contest.year}</span>
               </div>
-            )}
-            <p className="evidence-note">{item.evidenceNote}</p>
-            <a href={item.contest.sourceUrl} target="_blank" rel="noreferrer">Abrir fonte oficial ↗</a>
-          </article>
-        ))}
+              <h3>{item.name}</h3>
+              <p className="muted">{item.locality ?? "Localidade conforme edital"} · nível {item.level}</p>
+              <div className="chips">
+                {item.knowledge.map((slug) => (
+                  <Link className="chip" key={slug} href={`/conhecimentos/${slug}`}>{knowledgeName(slug)}</Link>
+                ))}
+              </div>
+              {isGranular && extractedTopics.length > 0 && (
+                <div className="granular-preview">
+                  <span className="coverage-badge">{extractedTopics.length} tópicos decompostos</span>
+                  <p>{extractedTopics.slice(0, 6).map(granularTopicName).join(" · ")}{extractedTopics.length > 6 ? " · …" : ""}</p>
+                </div>
+              )}
+              <p className="evidence-note">{item.evidenceNote}</p>
+              <div className="track-actions">
+                <Link href={`/trilhas/${item.id}`}>Abrir trilha →</Link>
+                <a href={item.contest.sourceUrl} target="_blank" rel="noreferrer">Fonte ↗</a>
+              </div>
+            </article>
+          );
+        })}
         {visible.length === 0 && (
           <div className="empty-state">
             Nenhuma trilha atende aos filtros atuais. Remova um filtro ou consulte a metodologia para entender a cobertura incremental da base.
