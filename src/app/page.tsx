@@ -17,6 +17,7 @@ export default function HomePage() {
           <div className="actions">
             <Link className="button primary" href="/comecar">Quero começar do zero</Link>
             <Link className="button" href="/mapa">Explorar a cartografia</Link>
+            <Link className="button" href="/frequencia">Ver o que se repete</Link>
           </div>
           <div className="stats">
             <div className="stat"><strong>{areas.length}</strong><span>famílias de atuação</span></div>
@@ -52,6 +53,29 @@ export default function HomePage() {
               <h3>Quero comparar concursos</h3>
               <p>Compare duas trilhas no nível macro e, quando os editais já foram decompostos, também no nível de tópicos.</p>
               <Link className="card-link" href="/comparar">Comparar duas trilhas →</Link>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-heading">
+            <div><div className="eyebrow">M3 · frequência</div><h2>Do “isso cai muito” para uma conta auditável.</h2></div>
+            <p>O projeto agora calcula frequência apenas junto do recorte e do denominador que sustentam o percentual.</p>
+          </div>
+          <div className="route-grid">
+            <article className="route-card">
+              <span className="number">01 · núcleo observado</span>
+              <h3>Veja quais conhecimentos reaparecem dentro de um recorte explícito</h3>
+              <p className="muted">Filtre por família de atuação e família institucional e escolha o limiar de recorrência que deseja inspecionar.</p>
+              <Link className="card-link" href="/frequencia">Abrir frequência →</Link>
+            </article>
+            <article className="route-card">
+              <span className="number">02 · denominador visível</span>
+              <h3>Saiba exatamente quais trilhas entraram em cada percentual</h3>
+              <p className="muted">A página mostra o manifesto do denominador e separa frequência macro de frequência granular, evitando misturar editais ainda não decompostos.</p>
+              <Link className="card-link" href="/metodologia">Ver metodologia →</Link>
             </article>
           </div>
         </div>
