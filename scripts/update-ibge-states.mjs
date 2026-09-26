@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+// Reexecutável: consulta as APIs oficiais do IBGE, valida as 27 UFs e grava um snapshot local.
 import { createHash } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
@@ -57,7 +58,7 @@ function assertValidFeatureCollection(collection) {
 
   for (const feature of collection.features) {
     const geometryType = feature.geometry?.type;
-    if (!['Polygon', 'MultiPolygon'].includes(geometryType)) {
+    if (!["Polygon", "MultiPolygon"].includes(geometryType)) {
       throw new Error(`Geometria inesperada em ${feature.properties?.sigla}: ${geometryType}`);
     }
   }
@@ -124,7 +125,7 @@ async function main() {
   await writeFile(MANIFEST, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 
   console.log(`Gravado ${OUTPUT} (${features.length} UFs, sha256 ${sha256}).`);
-  console.log(`Manifesto: ${MANIFEST}`);
+  console.log(`Manifesto: ${MANIFEST}.`);
 }
 
 main().catch((error) => {
