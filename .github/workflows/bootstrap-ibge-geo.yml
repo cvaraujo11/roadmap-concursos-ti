@@ -24,7 +24,7 @@ jobs:
         run: node scripts/update-ibge-states.mjs
       - name: Commit generated snapshot
         run: |
-          if git diff --quiet -- public/data/maps; then
+          if [ -z "$(git status --porcelain -- public/data/maps)" ]; then
             echo "No map data changes."
             exit 0
           fi
