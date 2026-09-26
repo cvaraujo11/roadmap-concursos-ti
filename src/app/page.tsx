@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { allTracks, areas, contests, knowledge, orgFamilies, topics } from "@/data/catalog";
+import { allTracks, areas, contests, knowledge, orgFamilies } from "@/data/catalog";
+import { granularTrackCount, topicCatalog } from "@/data/granular";
 
 export default function HomePage() {
-  const granularTracks = allTracks.filter((track) => track.coverage === "topicos").length;
+  const granularTracks = granularTrackCount(allTracks);
 
   return (
     <>
@@ -23,7 +24,7 @@ export default function HomePage() {
             <div className="stat"><strong>{contests.length}</strong><span>certames documentados</span></div>
             <div className="stat"><strong>{allTracks.length}</strong><span>trilhas/perfis mapeados</span></div>
           </div>
-          <p className="hero-footnote">{knowledge.length} macroconhecimentos · {topics.length} tópicos na taxonomia · {granularTracks} trilhas já decompostas em nível fino</p>
+          <p className="hero-footnote">{knowledge.length} macroconhecimentos · {topicCatalog.length} tópicos na taxonomia · {granularTracks} trilhas já decompostas em nível fino</p>
         </div>
       </section>
 
