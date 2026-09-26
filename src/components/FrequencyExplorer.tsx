@@ -28,8 +28,12 @@ export function FrequencyExplorer() {
 
   const cohort = useMemo(() => cohortForFrequency(mode, filters), [mode, filters]);
   const rows = useMemo(() => frequencyRows(mode, filters), [mode, filters]);
-  const core = useMemo(() => observedCore(rows, threshold), [rows, threshold]);
   const summary = useMemo(() => cohortSummary(cohort), [cohort]);
+  const enoughForCore = summary.tracks >= 2;
+  const core = useMemo(
+    () => (enoughForCore ? observedCore(rows, threshold) : []),
+    [rows, threshold, enoughForCore]
+  );
 
   return (
     <div className="frequency-explorer">
@@ -62,7 +66,7 @@ export function FrequencyExplorer() {
         </label>
         <label>
           Limiar do núcleo observado
-          <select value={threshold} onChange={(event) => setThreshold(Number(event.target.value))}>
+          <select value={threshold} onChange={(event) => setThreshold(Number(event.target.value))} disabled={!enoughForCore}>
             {thresholds.map((item) => <option value={item} key={item}>{item}% ou mais</option>)}
           </select>
         </label>
@@ -72,7 +76,7 @@ export function FrequencyExplorer() {
         <div className="stat"><strong>{summary.tracks}</strong><span>trilhas no denominador</span></div>
         <div className="stat"><strong>{summary.contests}</strong><span>certames representados</span></div>
         <div className="stat"><strong>{summary.institutions}</strong><span>instituições representadas</span></div>
-        <div className="stat"><strong>{core.length}</strong><span>itens no núcleo ≥ {threshold}%</span></div>
+        <div className="stat"><strong>{enoughForCore ? core.length : "—"}</strong><span>{enoughForCore ? `itens no núcleo ≥ ${threshold}%` : "núcleo exige ≥ 2 trilhas"}</span></div>
       </div>
 
       <div className="denominator-card">
@@ -91,20 +95,24 @@ export function FrequencyExplorer() {
         <>
           <section className="frequency-core-section">
             <div className="section-heading">
-              <div><div className="eyebrow">Núcleo observado</div><h2>Itens presentes em pelo menos {threshold}% do recorte</h2></div>
+              <div><div className="eyebrow">Núcleo observado</div><h2>{enoughForCore ? `Itens presentes em pelo menos ${threshold}% do recorte` : "Recorte pequeno demais para formar um núcleo"}</h2></div>
               <p>Isto descreve a amostra catalogada. Não é uma recomendação de prioridade, nem uma estimativa da incidência nacional.</p>
             </div>
-            <div className="frequency-core-grid">
-              {core.slice(0, 12).map((row) => (
-                <article className="frequency-core-card" key={row.slug}>
-                  <div className="frequency-score">{row.percentage}%</div>
-                  <span className="card-kicker">{knowledgeName(row.knowledge)}</span>
-                  <h3>{row.name}</h3>
-                  <p>{row.count}/{row.denominator} trilhas · {row.institutions.length} instituição{row.institutions.length === 1 ? "" : "ões"}</p>
-                </article>
-              ))}
-              {core.length === 0 && <div className="empty-state">Nenhum item alcança o limiar atual neste recorte.</div>}
-            </div>
+            {enoughForCore ? (
+              <div className="frequency-core-grid">
+                {core.slice(0, 12).map((row) => (
+                  <article className="frequency-core-card" key={row.slug}>
+                    <div className="frequency-score">{row.percentage}%</div>
+                    <span className="card-kicker">{knowledgeName(row.knowledge)}</span>
+                    <h3>{row.name}</h3>
+                    <p>{row.count}/{row.denominator} trilhas · {row.institutions.length} instituição{row.institutions.length === 1 ? "" : "ões"}</p>
+                  </article>
+                ))}
+                {core.length === 0 && <div className="empty-state">Nenhum item alcança o limiar atual neste recorte.</div>}
+              </div>
+            ) : (
+              <div className="empty-state">Com uma única trilha, qualquer item presente teria frequência de 100%. A M3 não chama isso de “núcleo observado”; amplie o recorte para pelo menos duas trilhas.</div>
+            )}
           </section>
 
           <section className="frequency-table-section">
